@@ -9,43 +9,19 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="ikon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="ikon.svg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2026112102">
+  <script>
+    // Bersihkan cache Service Worker lama bila ada agar aplikasi selalu termuat segar
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        for (var i = 0; i < regs.length; i++) {
+          regs[i].update();
+        }
+      });
+    }
+  </script>
 </head>
 <body>
-
-  <!-- Layar Masuk / Kunci PIN (Opsional) -->
-  <div id="layarKunci" class="layar-kunci" hidden>
-    <div class="kunci-kartu">
-      <div class="kunci-logo">
-        <img src="ikon.svg" alt="NataArta" width="56" height="56">
-      </div>
-      <h2 id="judulTokoKunci">Bakso Pak Darto</h2>
-      <p class="sub-kunci">NataArta POS · Masukkan PIN Kasir</p>
-      
-      <div class="pin-indikator" id="pinIndikator">
-        <span class="titik-pin"></span>
-        <span class="titik-pin"></span>
-        <span class="titik-pin"></span>
-        <span class="titik-pin"></span>
-      </div>
-
-      <div class="pad-pin">
-        <button type="button" class="btn-pin" data-angka="1">1</button>
-        <button type="button" class="btn-pin" data-angka="2">2</button>
-        <button type="button" class="btn-pin" data-angka="3">3</button>
-        <button type="button" class="btn-pin" data-angka="4">4</button>
-        <button type="button" class="btn-pin" data-angka="5">5</button>
-        <button type="button" class="btn-pin" data-angka="6">6</button>
-        <button type="button" class="btn-pin" data-angka="7">7</button>
-        <button type="button" class="btn-pin" data-angka="8">8</button>
-        <button type="button" class="btn-pin" data-angka="9">9</button>
-        <button type="button" class="btn-pin btn-khusus" id="btnBatalPin">Batal</button>
-        <button type="button" class="btn-pin" data-angka="0">0</button>
-        <button type="button" class="btn-pin btn-khusus" id="btnHapusPin">⌫</button>
-      </div>
-      <p class="info-kunci">PIN Kasir Bawaan: <b>1234</b></p>
-    </div>
-  </div>
 
   <!-- Kontainer Aplikasi Utama -->
   <div class="wadah-app">
@@ -92,9 +68,6 @@
           <strong id="labelKasir">Pak Darto</strong>
           <small id="jamLive">00:00</small>
         </div>
-        <button id="btnKunciSesi" class="btn-icon" title="Kunci Kasir" aria-label="Kunci Kasir">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </button>
       </div>
     </aside>
 
@@ -295,7 +268,7 @@
         <div class="kepala-halaman">
           <div>
             <h1>Pengaturan NataArta</h1>
-            <p>Kelola data warung, pesan struk, keamanan PIN kasir, dan backup.</p>
+            <p>Kelola data warung, pesan struk, dan pencadangan data.</p>
           </div>
         </div>
 
@@ -324,26 +297,8 @@
             </form>
           </div>
 
-          <!-- Keamanan & Backup -->
+          <!-- Backup Data -->
           <div class="kartu-pengaturan">
-            <h3>Keamanan PIN Kasir</h3>
-            <form id="formKeamanan">
-              <div class="bidang-form">
-                <label class="label-switch">
-                  <input type="checkbox" id="setGunakanPin">
-                  <span>Aktifkan Kunci Layar PIN</span>
-                </label>
-                <small class="bantu">Mencegah akses kasir yang tidak diizinkan saat ditinggal.</small>
-              </div>
-              <div class="bidang-form">
-                <label for="setPinBaru">Ubah PIN Kasir (4 Angka)</label>
-                <input type="password" maxlength="4" pattern="\d{4}" id="setPinBaru" placeholder="1234">
-              </div>
-              <button type="submit" class="btn-sekunder">Perbarui PIN</button>
-            </form>
-
-            <hr class="garis-pisah">
-
             <h3>Backup & Pemulihan Data</h3>
             <p class="redup-kecil">Data tersimpan di perangkat kasir. Unduh backup berkala.</p>
             <div class="baris-tombol-backup">
@@ -569,6 +524,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2026112102"></script>
 </body>
 </html>

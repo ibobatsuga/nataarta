@@ -985,12 +985,9 @@
   // ----------------------------------------------------
   function init() {
     $('#namaTokoHeader').textContent = state.toko.nama || 'Bakso Pak Darto';
-    $('#judulTokoKunci').textContent = state.toko.nama || 'Bakso Pak Darto';
 
     aturNavigasi();
     aturJam();
-    aturPadPin();
-    periksaKunciLayar();
 
     renderKategori();
     renderGridProduk();
