@@ -873,7 +873,8 @@
   // ----------------------------------------------------
   function periksaKunciLayar() {
     const layar = $('#layarKunci');
-    if (state.toko.kunciPin) {
+    if (!layar) return;
+    if (state.toko && state.toko.kunciPin === true) {
       layar.hidden = false;
       pinBuffer = '';
       updatePinIndikator();
@@ -888,6 +889,21 @@
     });
   }
 
+  function verifikasiPin() {
+    setTimeout(() => {
+      const targetPin = (state.toko && state.toko.pin) || '1234';
+      if (pinBuffer === targetPin) {
+        $('#layarKunci').hidden = true;
+        pinBuffer = '';
+        updatePinIndikator();
+      } else {
+        alert('PIN kasir salah! (Default: 1234)');
+        pinBuffer = '';
+        updatePinIndikator();
+      }
+    }, 100);
+  }
+
   function aturPadPin() {
     $$('.pad-pin .btn-pin[data-angka]').forEach((b) => {
       b.addEventListener('click', () => {
@@ -896,18 +912,7 @@
           updatePinIndikator();
 
           if (pinBuffer.length === 4) {
-            setTimeout(() => {
-              const targetPin = state.toko.pin || '1234';
-              if (pinBuffer === targetPin) {
-                $('#layarKunci').hidden = true;
-                pinBuffer = '';
-                updatePinIndikator();
-              } else {
-                alert('PIN kasir salah!');
-                pinBuffer = '';
-                updatePinIndikator();
-              }
-            }, 100);
+            verifikasiPin();
           }
         }
       });
@@ -921,12 +926,34 @@
     $('#btnBatalPin')?.addEventListener('click', () => {
       pinBuffer = '';
       updatePinIndikator();
+      $('#layarKunci').hidden = true;
     });
 
     $('#btnKunciSesi')?.addEventListener('click', () => {
       $('#layarKunci').hidden = false;
       pinBuffer = '';
       updatePinIndikator();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const layar = $('#layarKunci');
+      if (!layar || layar.hidden) return;
+      if (/^[0-9]$/.test(e.key)) {
+        if (pinBuffer.length < 4) {
+          pinBuffer += e.key;
+          updatePinIndikator();
+          if (pinBuffer.length === 4) {
+            verifikasiPin();
+          }
+        }
+      } else if (e.key === 'Backspace') {
+        pinBuffer = pinBuffer.slice(0, -1);
+        updatePinIndikator();
+      } else if (e.key === 'Escape') {
+        pinBuffer = '';
+        updatePinIndikator();
+        $('#layarKunci').hidden = true;
+      }
     });
   }
 
