@@ -5,161 +5,356 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>NataArta — Kasir Bakso Pak Darto</title>
   <meta name="description" content="NataArta: Aplikasi Kasir POS Cerdas & Praktis untuk Bakso Pak Darto.">
-  <meta name="theme-color" content="#b91c1c">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="ikon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="ikon.svg">
-  <link rel="stylesheet" href="style.css?v=2026112102">
-  <script>
-    // Bersihkan cache Service Worker lama bila ada agar aplikasi selalu termuat segar
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(regs) {
-        for (var i = 0; i < regs.length; i++) {
-          regs[i].update();
-        }
-      });
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2026112103">
 </head>
 <body>
 
   <!-- Kontainer Aplikasi Utama -->
   <div class="wadah-app">
     
-    <!-- Sidebar / Navigasi Atas -->
-    <aside class="nav-samping">
-      <div class="brand-wadah">
-        <div class="brand-logo">
-          <img src="ikon.svg" alt="NataArta" width="38" height="38">
+    <!-- HEADER ATAS / BREADCRUMB -->
+    <header class="top-nav-bar">
+      <div class="top-kiri">
+        <div class="brand-badge-circle">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
         </div>
-        <div class="brand-teks">
-          <span class="brand-nama">NataArta</span>
-          <span class="brand-sub" id="namaTokoHeader">Bakso Pak Darto</span>
-          <span class="brand-status"><span class="titik-online"></span> POS Aktif</span>
+        <span class="brand-kode">NA</span>
+        <div class="breadcrumb-pill">
+          <span class="bc-prefix" id="namaTokoHeader">.bakso</span>
+          <span class="bc-slash">/</span>
+          <span class="bc-hal" id="labelHalamanAktif">beranda</span>
+        </div>
+      </div>
+
+      <!-- Kategori Filter Khusus Tab Kasir (Di Header Atas Sesuai Ref Image 2) -->
+      <div class="kategori-header-bar" id="wadahKategoriHeader" hidden>
+        <div class="kategori-chips" id="wadahKategori">
+          <!-- Diisi dinamis: All 40, Bakso Kuah 5, Mie Ayam 2, dll -->
         </div>
       </div>
 
-      <nav class="daftar-nav">
-        <button class="nav-item aktif" data-target="hal-kasir">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span>Kasir</span>
-        </button>
-        <button class="nav-item" data-target="hal-produk">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          <span>Menu</span>
-        </button>
-        <button class="nav-item" data-target="hal-riwayat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>Riwayat</span>
-        </button>
-        <button class="nav-item" data-target="hal-laporan">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          <span>Laporan</span>
-        </button>
-        <button class="nav-item" data-target="hal-pengaturan">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span>Pengaturan</span>
-        </button>
-      </nav>
-
-      <div class="info-kasir-footer">
-        <div class="avatar-kasir" id="avatarKasir">D</div>
-        <div class="user-meta">
-          <strong id="labelKasir">Pak Darto</strong>
-          <small id="jamLive">00:00</small>
+      <div class="top-kanan">
+        <div class="status-kasir-pill">
+          <span class="titik-live"></span>
+          <span id="labelKasir">Pak Darto</span>
+          <span class="pemisah-titik">•</span>
+          <span id="jamLive">00:00</span>
         </div>
+        <button type="button" class="btn-icon-lock" id="btnKunciSesi" title="Kunci Kasir (PIN)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </button>
       </div>
-    </aside>
+    </header>
 
-    <!-- Konten Utama -->
+    <!-- KONTEN HALAMAN -->
     <main class="konten-halaman">
       
-      <!-- HALAMAN 1: TERMINAL KASIR -->
-      <section id="hal-kasir" class="halaman aktif">
-        <div class="tata-kasir">
+      <!-- ======================================================== -->
+      <!-- HALAMAN 1: BERANDA / DASHBOARD (Sesuai Referensi Gambar 1) -->
+      <!-- ======================================================== -->
+      <section id="hal-beranda" class="halaman aktif">
+        <div class="layout-dashboard">
           
-          <!-- Area Katalog & Menu -->
-          <div class="area-katalog">
-            <div class="baris-filter">
-              <div class="kotak-cari">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="search" id="inputCariProduk" placeholder="Cari bakso, mie, minuman, atau camilan..." autocomplete="off">
+          <!-- Area Kiri Utama Dashboard -->
+          <div class="kolom-utama-dash">
+            
+            <!-- Banner Peringatan Stok Menipis -->
+            <div class="banner-stok-warning" id="bannerStokMenipis" role="button" tabindex="0">
+              <div class="warning-konten">
+                <div class="icon-warning-circle">!</div>
+                <span id="teksStokMenipis">3 menu hampir habis porsi stok</span>
               </div>
-              <div class="kategori-chips" id="wadahKategori">
+              <svg class="chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+
+            <!-- 4 Kartu KPI Metric (Today Sales, Order, Avg Order, Active Tables) -->
+            <div class="grid-kpi-4">
+              
+              <!-- KPI 1: Today Sales -->
+              <div class="kartu-kpi" id="kpiSalesCard">
+                <div class="kpi-top">
+                  <div class="kpi-icon-box bg-soft-green">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10b981" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <svg class="kpi-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="kpi-label">Today Sales</div>
+                <div class="kpi-nilai" id="statTodaySales">Rp0</div>
+              </div>
+
+              <!-- KPI 2: Order -->
+              <div class="kartu-kpi" id="kpiOrderCard">
+                <div class="kpi-top">
+                  <div class="kpi-icon-box bg-soft-yellow">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f59e0b" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  </div>
+                  <svg class="kpi-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="kpi-label">Order</div>
+                <div class="kpi-nilai" id="statTotalOrders">0</div>
+              </div>
+
+              <!-- KPI 3: Avg Order -->
+              <div class="kartu-kpi" id="kpiAvgCard">
+                <div class="kpi-top">
+                  <div class="kpi-icon-box bg-soft-blue">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3b82f6" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <svg class="kpi-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="kpi-label">Avg Order</div>
+                <div class="kpi-nilai" id="statAvgOrder">Rp0</div>
+              </div>
+
+              <!-- KPI 4: Active Tables -->
+              <div class="kartu-kpi" id="kpiTablesCard">
+                <div class="kpi-top">
+                  <div class="kpi-icon-box bg-soft-purple">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8b5cf6" stroke-width="2.2"><path d="M4 18v3M20 18v3M2 11h20M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg>
+                  </div>
+                  <svg class="kpi-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="kpi-label">Active Tables</div>
+                <div class="kpi-nilai" id="statActiveTables">4/19</div>
+              </div>
+
+            </div>
+
+            <!-- Kartu Grafik Penjualan (Sales Overview) -->
+            <div class="kartu-grafik-overview">
+              <div class="header-grafik">
+                <div>
+                  <div class="judul-grafik" id="labelRentangGrafik">Sales Overview (7 Hari Terakhir)</div>
+                  <div class="total-omzet-grafik" id="labelTotalGrafik">Rp0</div>
+                </div>
+                <div class="filter-periode-segmented" id="pillsFilterGrafik">
+                  <button type="button" class="btn-segment aktif" data-grafik="week">Week</button>
+                  <button type="button" class="btn-segment" data-grafik="month">Month</button>
+                  <button type="button" class="btn-segment" data-grafik="year">Year</button>
+                </div>
+              </div>
+
+              <!-- Area Canvas / SVG Chart Dinamis -->
+              <div class="kontainer-chart-svg">
+                <svg id="svgSalesChart" viewBox="0 0 700 240" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                      <stop offset="100%" stop-color="#10b981" stop-opacity="0.00"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Garis horizontal grid -->
+                  <line x1="50" y1="30" x2="680" y2="30" stroke="#f1f1f4" stroke-width="1"/>
+                  <line x1="50" y1="80" x2="680" y2="80" stroke="#f1f1f4" stroke-width="1"/>
+                  <line x1="50" y1="130" x2="680" y2="130" stroke="#f1f1f4" stroke-width="1"/>
+                  <line x1="50" y1="180" x2="680" y2="180" stroke="#f1f1f4" stroke-width="1"/>
+                  
+                  <!-- Area & Line Path -->
+                  <path id="chartAreaPath" d="" fill="url(#chartGradient)"></path>
+                  <path id="chartLinePath" d="" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                  
+                  <!-- Titik Data -->
+                  <g id="chartDotsGroup"></g>
+                </svg>
+                <!-- Sumbu X Hari -->
+                <div class="sumbu-x-hari" id="labelSumbuX">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kartu Recent Orders (Last 30 min) -->
+            <div class="kartu-recent-orders">
+              <div class="header-recent">
+                <h3>Recent Orders <span class="sub-recent">(Hari Ini)</span></h3>
+                <button type="button" class="btn-view-all" id="btnLihatSemuaRiwayat">View All &gt;</button>
+              </div>
+              <div class="daftar-recent-orders" id="wadahRecentOrders">
+                <!-- Diisi via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Sidebar Kanan Dashboard (Popular Items & Less Sell) -->
+          <div class="kolom-samping-dash">
+            
+            <!-- Popular Items -->
+            <div class="panel-list-produk-side">
+              <div class="header-side-panel">
+                <h3>Popular Items</h3>
+                <button type="button" class="btn-view-all" id="btnLihatSemuaMenuPop">View All &gt;</button>
+              </div>
+              <div class="daftar-item-side" id="wadahPopularItems">
                 <!-- Diisi dinamis -->
               </div>
             </div>
 
-            <div class="grid-produk" id="gridProduk">
-              <!-- Kartu produk diisi dinamis -->
-            </div>
-          </div>
-
-          <!-- Panel Pesanan / Keranjang -->
-          <div class="panel-keranjang">
-            <div class="kepala-keranjang">
-              <div>
-                <h2>Meja & Pesanan</h2>
-                <span class="no-pesanan" id="noInvoiceDraft">#INV-001</span>
+            <!-- Less Sell -->
+            <div class="panel-list-produk-side" style="margin-top: 24px;">
+              <div class="header-side-panel">
+                <h3>Less Sell</h3>
+                <button type="button" class="btn-view-all" id="btnLihatSemuaMenuLess">View All &gt;</button>
               </div>
-              <button type="button" class="btn-teks bahaya" id="btnKosongkanKeranjang">Reset</button>
+              <div class="daftar-item-side" id="wadahLessSell">
+                <!-- Diisi dinamis -->
+              </div>
             </div>
 
-            <div class="daftar-item-keranjang" id="wadahItemKeranjang">
-              <!-- Item pesanan diisi dinamis -->
-            </div>
-
-            <div class="kalkulasi-keranjang">
-              <div class="baris-kalkulasi">
-                <span>Subtotal</span>
-                <span id="labelSubtotal">Rp0</span>
-              </div>
-              <div class="baris-kalkulasi">
-                <span class="label-fleksibel">
-                  Potongan / Diskon
-                  <button type="button" class="btn-tautan" id="btnAturDiskon">(Atur)</button>
-                </span>
-                <span id="labelDiskon" class="teks-sukses">-Rp0</span>
-              </div>
-              <div class="baris-kalkulasi baris-total">
-                <span>Total Bayar</span>
-                <strong id="labelGrandTotal">Rp0</strong>
-              </div>
-
-              <button type="button" class="btn-utama besar" id="btnBukaBayar" disabled>
-                <span>Proses Bayar</span>
-                <span id="btnBayarNominal">Rp0</span>
-              </button>
-            </div>
           </div>
 
         </div>
       </section>
 
-      <!-- HALAMAN 2: MANAJEMEN MENU -->
-      <section id="hal-produk" class="halaman">
-        <div class="kepala-halaman">
-          <div>
-            <h1>Daftar Menu & Stok</h1>
-            <p>Kelola menu bakso, mie, minuman, porsi dan harga jual.</p>
+      <!-- ======================================================== -->
+      <!-- HALAMAN 2: KASIR / ORDER (Sesuai Referensi Gambar 2)      -->
+      <!-- ======================================================== -->
+      <section id="hal-kasir" class="halaman">
+        <div class="layout-kasir-order">
+          
+          <!-- Area Katalog Grid (Kiri) -->
+          <div class="area-katalog-kasir">
+            
+            <div class="grid-menu-cards" id="gridProduk">
+              <!-- Kartu produk diisi dinamis: badge, nama, harga, +, gambar -->
+            </div>
           </div>
-          <button type="button" class="btn-utama" id="btnTambahProduk">+ Tambah Menu</button>
+
+          <!-- Panel Order Detail / Keranjang (Kanan) -->
+          <div class="panel-order-detail">
+            
+            <div class="header-order-detail">
+              <div class="title-order-detail">
+                <h2>Order detail</h2>
+                <span class="no-pesanan-badge" id="noInvoiceDraft">#ORD-1001</span>
+              </div>
+              
+              <!-- Badges Meja & Tamu (F:6, B:8 style) -->
+              <div class="info-pills-order">
+                <button type="button" class="order-pill-badge" id="badgeMejaAktif" title="Ganti Meja">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 18v3M20 18v3M2 11h20M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg>
+                  <span id="labelMejaPill">Meja 07</span>
+                </button>
+                <button type="button" class="order-pill-badge" id="badgeTamuAktif" title="Jumlah Tamu">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  <span id="labelTamuPill">4 Org</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- List Item Keranjang -->
+            <div class="daftar-item-order" id="wadahItemKeranjang">
+              <!-- Diisi via JS -->
+            </div>
+
+            <!-- Bottom Floating Summary Card (Sesuai Ref Image 2) -->
+            <div class="kartu-summary-order">
+              <div class="baris-calc">
+                <span>Total item</span>
+                <span id="labelTotalItemKeranjang" class="nilai-calc">0</span>
+              </div>
+              <div class="baris-calc">
+                <span>Subtotal</span>
+                <span id="labelSubtotal" class="nilai-calc">Rp0</span>
+              </div>
+              <div class="baris-calc">
+                <span>Discount</span>
+                <span id="labelDiskon" class="nilai-calc">-</span>
+              </div>
+              <div class="baris-calc" id="barisPajak">
+                <span id="labelTeksPajak">Tax (10%)</span>
+                <span id="labelPajak" class="nilai-calc">Rp0</span>
+              </div>
+              <div class="baris-calc baris-grand-total">
+                <span>Total Payment</span>
+                <strong id="labelGrandTotal">Rp0</strong>
+              </div>
+
+              <!-- 2 Action Pills (Table: 7 Available, Discount: 3 Available) -->
+              <div class="dua-pill-opsi">
+                <button type="button" class="btn-opsi-pill" id="btnAturMejaOrder">
+                  <span class="label-muted">Table</span>
+                  <span class="val-pill" id="btnPillTableStatus">7 Available</span>
+                </button>
+                <button type="button" class="btn-opsi-pill" id="btnAturDiskon">
+                  <span class="label-muted">Discount</span>
+                  <span class="val-pill" id="btnPillDiscountStatus">3 Available</span>
+                </button>
+              </div>
+
+              <!-- Tombol Utama: Continue Payment -->
+              <button type="button" class="btn-continue-payment" id="btnBukaBayar" disabled>
+                <span>Continue Payment</span>
+                <span class="nominal-bayar-btn" id="btnBayarNominal">Rp0</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- HALAMAN 3: MEJA / TABLES (Denah Meja Resto)               -->
+      <!-- ======================================================== -->
+      <section id="hal-meja" class="halaman">
+        <div class="kepala-halaman-modern">
+          <div>
+            <h1>Daftar Meja Restoran</h1>
+            <p>Pilih meja pelanggan untuk pemesanan dine-in atau takeaway.</p>
+          </div>
+          <div class="filter-meja-stat">
+            <span class="badge-stat-meja kosong"><span class="dot-status hijau"></span> <b id="statMejaKosong">11</b> Kosong</span>
+            <span class="badge-stat-meja terisi"><span class="dot-status merah"></span> <b id="statMejaTerisi">8</b> Terisi</span>
+          </div>
         </div>
 
-        <div class="kartu-tabel">
-          <div class="baris-alat-tabel">
-            <input type="search" id="cariTabelProduk" placeholder="Cari nama menu..." class="input-tabel">
-            <span class="total-produk-label" id="labelTotalProduk">0 Menu</span>
+        <div class="grid-meja-modern" id="wadahGridMeja">
+          <!-- Meja 01 s/d Meja 19 diisi dinamis -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- HALAMAN 4: MENU & STOK (Katalog Produk)                   -->
+      <!-- ======================================================== -->
+      <section id="hal-produk" class="halaman">
+        <div class="kepala-halaman-modern">
+          <div>
+            <h1>Kelola Menu & Stok</h1>
+            <p>Atur resep bakso, mie ayam, minuman, stok porsi, dan harga jual.</p>
           </div>
-          <div class="tabel-gulir">
-            <table class="tabel-data">
+          <button type="button" class="btn-utama-dark" id="btnTambahProduk">+ Tambah Menu</button>
+        </div>
+
+        <div class="kartu-tabel-modern">
+          <div class="baris-filter-tabel">
+            <div class="kotak-cari-input">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="search" id="cariTabelProduk" placeholder="Cari nama menu, kode, kategori...">
+            </div>
+            <span class="label-counter-produk" id="labelTotalProduk">0 Menu</span>
+          </div>
+
+          <div class="tabel-gulir-modern">
+            <table class="tabel-data-modern">
               <thead>
                 <tr>
                   <th>Menu</th>
                   <th>Kategori</th>
                   <th>Harga Jual</th>
                   <th>Harga Modal</th>
-                  <th>Porsi Tersedia</th>
+                  <th>Stok Porsi</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -171,22 +366,24 @@
         </div>
       </section>
 
-      <!-- HALAMAN 3: RIWAYAT TRANSAKSI -->
+      <!-- ======================================================== -->
+      <!-- HALAMAN 5: RIWAYAT TRANSAKSI                              -->
+      <!-- ======================================================== -->
       <section id="hal-riwayat" class="halaman">
-        <div class="kepala-halaman">
+        <div class="kepala-halaman-modern">
           <div>
             <h1>Riwayat Transaksi</h1>
-            <p>Daftar pesanan selesai, cetak ulang struk, dan pembatalan nota.</p>
+            <p>Daftar pesanan selesai, cetak ulang struk nota, dan pembatalan transaksi.</p>
           </div>
-          <div class="filter-tanggal">
-            <input type="date" id="filterTanggalRiwayat">
-            <button type="button" class="btn-sekunder" id="btnResetTanggal">Semua</button>
+          <div class="filter-tanggal-group">
+            <input type="date" id="filterTanggalRiwayat" class="input-tgl-modern">
+            <button type="button" class="btn-filter-reset" id="btnResetTanggal">Semua</button>
           </div>
         </div>
 
-        <div class="kartu-tabel">
-          <div class="tabel-gulir">
-            <table class="tabel-data">
+        <div class="kartu-tabel-modern">
+          <div class="tabel-gulir-modern">
+            <table class="tabel-data-modern">
               <thead>
                 <tr>
                   <th>No. Nota</th>
@@ -207,47 +404,49 @@
         </div>
       </section>
 
-      <!-- HALAMAN 4: LAPORAN PENJUALAN -->
+      <!-- ======================================================== -->
+      <!-- HALAMAN 6: LAPORAN PENJUALAN                              -->
+      <!-- ======================================================== -->
       <section id="hal-laporan" class="halaman">
-        <div class="kepala-halaman">
+        <div class="kepala-halaman-modern">
           <div>
             <h1>Laporan Penjualan</h1>
-            <p>Ringkasan omzet Bakso Pak Darto, laba kotor, dan menu paling laku.</p>
+            <p>Ringkasan omzet, laba kotor, dan performa menu Bakso Pak Darto.</p>
           </div>
-          <div class="periode-pills" id="wadahPeriodeLaporan">
-            <button type="button" class="pil aktif" data-periode="hari">Hari Ini</button>
-            <button type="button" class="pil" data-periode="minggu">7 Hari</button>
-            <button type="button" class="pil" data-periode="bulan">Bulan Ini</button>
-            <button type="button" class="pil" data-periode="semua">Semua</button>
-          </div>
-        </div>
-
-        <div class="grid-statistik">
-          <div class="kartu-stat">
-            <span class="stat-label">Total Omzet</span>
-            <strong class="stat-nilai" id="statOmzet">Rp0</strong>
-            <small class="stat-ket">Penjualan bersih</small>
-          </div>
-          <div class="kartu-stat">
-            <span class="stat-label">Total Transaksi</span>
-            <strong class="stat-nilai" id="statTransaksi">0</strong>
-            <small class="stat-ket">Nota lunas</small>
-          </div>
-          <div class="kartu-stat">
-            <span class="stat-label">Estimasi Laba Kotor</span>
-            <strong class="stat-nilai teks-sukses" id="statLaba">Rp0</strong>
-            <small class="stat-ket">Omzet - Harga Modal</small>
-          </div>
-          <div class="kartu-stat">
-            <span class="stat-label">Porsi Terjual</span>
-            <strong class="stat-nilai" id="statItemTerjual">0</strong>
-            <small class="stat-ket">Total mangkok / porsi</small>
+          <div class="filter-periode-segmented" id="wadahPeriodeLaporan">
+            <button type="button" class="btn-segment aktif" data-periode="hari">Hari Ini</button>
+            <button type="button" class="btn-segment" data-periode="minggu">7 Hari</button>
+            <button type="button" class="btn-segment" data-periode="bulan">Bulan Ini</button>
+            <button type="button" class="btn-segment" data-periode="semua">Semua</button>
           </div>
         </div>
 
-        <div class="kartu-tabel" style="margin-top: 24px;">
-          <h3 style="margin-bottom: 16px;">Top 5 Menu Paling Favorit</h3>
-          <table class="tabel-data">
+        <div class="grid-kpi-4">
+          <div class="kartu-kpi">
+            <div class="kpi-label">Total Omzet</div>
+            <div class="kpi-nilai" id="statOmzet">Rp0</div>
+            <div class="kpi-sub">Penjualan bersih</div>
+          </div>
+          <div class="kartu-kpi">
+            <div class="kpi-label">Total Transaksi</div>
+            <div class="kpi-nilai" id="statTransaksi">0</div>
+            <div class="kpi-sub">Nota lunas</div>
+          </div>
+          <div class="kartu-kpi">
+            <div class="kpi-label">Estimasi Laba Kotor</div>
+            <div class="kpi-nilai teks-sukses" id="statLaba">Rp0</div>
+            <div class="kpi-sub">Omzet - Modal</div>
+          </div>
+          <div class="kartu-kpi">
+            <div class="kpi-label">Porsi Terjual</div>
+            <div class="kpi-nilai" id="statItemTerjual">0</div>
+            <div class="kpi-sub">Total mangkok / porsi</div>
+          </div>
+        </div>
+
+        <div class="kartu-tabel-modern" style="margin-top: 20px;">
+          <h3 style="margin-bottom: 14px; font-size: 16px; font-weight: 700;">Top 5 Menu Paling Favorit</h3>
+          <table class="tabel-data-modern">
             <thead>
               <tr>
                 <th>Peringkat</th>
@@ -263,101 +462,278 @@
         </div>
       </section>
 
-      <!-- HALAMAN 5: PENGATURAN -->
+      <!-- ======================================================== -->
+      <!-- HALAMAN 7: PENGATURAN                                     -->
+      <!-- ======================================================== -->
       <section id="hal-pengaturan" class="halaman">
-        <div class="kepala-halaman">
+        <div class="kepala-halaman-modern">
           <div>
             <h1>Pengaturan NataArta</h1>
-            <p>Kelola data warung, pesan struk, dan pencadangan data.</p>
+            <p>Atur identitas warung, pajak resto (PB1), keamanan PIN, dan pencadangan data.</p>
           </div>
         </div>
 
-        <div class="grid-pengaturan">
-          <!-- Profil Warung -->
-          <div class="kartu-pengaturan">
+        <div class="grid-pengaturan-modern">
+          <!-- Profil Toko -->
+          <div class="kartu-setting">
             <h3>Profil Warung</h3>
             <form id="formProfilToko">
-              <div class="bidang-form">
+              <div class="field-setting">
                 <label for="setNamaToko">Nama Warung</label>
                 <input type="text" id="setNamaToko" required>
               </div>
-              <div class="bidang-form">
-                <label for="setAlamatToko">Alamat Warung</label>
+              <div class="field-setting">
+                <label for="setAlamatToko">Alamat</label>
                 <input type="text" id="setAlamatToko">
               </div>
-              <div class="bidang-form">
-                <label for="setTelpToko">Nomor WhatsApp / Telp</label>
+              <div class="field-setting">
+                <label for="setTelpToko">Nomor Telepon / WhatsApp</label>
                 <input type="text" id="setTelpToko">
               </div>
-              <div class="bidang-form">
-                <label for="setCatatanStruk">Pesan Struk (Footer)</label>
+              <div class="field-setting">
+                <label for="setCatatanStruk">Pesan Kaki Struk</label>
                 <input type="text" id="setCatatanStruk">
               </div>
-              <button type="submit" class="btn-utama">Simpan Profil</button>
+              <button type="submit" class="btn-utama-dark">Simpan Profil</button>
+            </form>
+          </div>
+
+          <!-- Pajak & Biaya Resto -->
+          <div class="kartu-setting">
+            <h3>Pajak & Layanan Restoran</h3>
+            <form id="formPajakSetting">
+              <div class="field-setting-switch">
+                <div>
+                  <strong>Pajak Restoran (PB1)</strong>
+                  <p class="muted-text">Otomatis hitung pajak 10% pada nota</p>
+                </div>
+                <label class="switch-toggle">
+                  <input type="checkbox" id="setPajakAktif" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="field-setting" style="margin-top: 14px;">
+                <label for="setPersenPajak">Persentase Pajak (%)</label>
+                <input type="number" id="setPersenPajak" min="0" max="25" value="10">
+              </div>
+              <button type="submit" class="btn-utama-dark" style="margin-top: 14px;">Simpan Pajak</button>
+            </form>
+          </div>
+
+          <!-- Keamanan PIN -->
+          <div class="kartu-setting">
+            <h3>Keamanan PIN Kasir</h3>
+            <form id="formKeamanan">
+              <div class="field-setting-switch">
+                <div>
+                  <strong>Kunci Layar dengan PIN</strong>
+                  <p class="muted-text">Minta PIN kasir saat sesi terkunci</p>
+                </div>
+                <label class="switch-toggle">
+                  <input type="checkbox" id="setGunakanPin">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="field-setting" style="margin-top: 14px;">
+                <label for="setPinBaru">Ganti PIN (4 Angka)</label>
+                <input type="password" id="setPinBaru" maxlength="4" placeholder="1234">
+              </div>
+              <button type="submit" class="btn-utama-dark" style="margin-top: 14px;">Simpan PIN</button>
             </form>
           </div>
 
           <!-- Backup Data -->
-          <div class="kartu-pengaturan">
+          <div class="kartu-setting">
             <h3>Backup & Pemulihan Data</h3>
-            <p class="redup-kecil">Data tersimpan di perangkat kasir. Unduh backup berkala.</p>
-            <div class="baris-tombol-backup">
-              <button type="button" class="btn-sekunder" id="btnEksporJson">Unduh Cadangan JSON</button>
-              <label class="btn-sekunder tombol-file">
+            <p class="muted-text">Data tersimpan di browser Anda secara offline. Unduh berkas cadangan secara berkala.</p>
+            <div class="aksi-backup-group">
+              <button type="button" class="btn-outline-action" id="btnEksporJson">Unduh Cadangan JSON</button>
+              <label class="btn-outline-action label-file-btn">
                 Pulihkan Cadangan JSON
                 <input type="file" id="inputImporJson" accept=".json" hidden>
               </label>
-              <button type="button" class="btn-sekunder" id="btnEksporCsv">Ekspor Rekap CSV Transaksi</button>
+              <button type="button" class="btn-outline-action" id="btnEksporCsv">Ekspor Rekap CSV</button>
             </div>
           </div>
         </div>
       </section>
 
     </main>
+
+    <!-- ======================================================== -->
+    <!-- FLOATING BOTTOM DOCK NAVIGATION (Sesuai Referensi Gambar)  -->
+    <!-- ======================================================== -->
+    <div class="floating-dock-container">
+      
+      <!-- Tombol Search Mengambang di Kiri Bawah -->
+      <button type="button" class="btn-floating-search" id="btnBukaPencarian" title="Cari Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+
+      <!-- Dock Pill Tengah -->
+      <nav class="dock-pill-bar">
+        <!-- 1: Beranda / Dashboard -->
+        <button type="button" class="dock-btn aktif" data-target="hal-beranda" title="Beranda (Sales Overview)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+        </button>
+
+        <!-- 2: Kasir / Order POS -->
+        <button type="button" class="dock-btn" data-target="hal-kasir" title="Kasir & Pesanan">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </button>
+
+        <!-- 3: Menu & Stok -->
+        <button type="button" class="dock-btn" data-target="hal-produk" title="Daftar Menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+            <path d="M7 2v20"></path>
+            <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+          </svg>
+        </button>
+
+        <!-- 4: Meja / Tables -->
+        <button type="button" class="dock-btn" data-target="hal-meja" title="Denah Meja Resto">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 18v3M20 18v3M2 11h20M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path>
+          </svg>
+        </button>
+
+        <!-- 5: Riwayat & Laporan -->
+        <button type="button" class="dock-btn" data-target="hal-riwayat" title="Riwayat & Laporan Transaksi">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="18" rx="2"></rect>
+            <line x1="8" y1="8" x2="16" y2="8"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+            <line x1="8" y1="16" x2="12" y2="16"></line>
+          </svg>
+        </button>
+
+        <!-- 6: Pengaturan -->
+        <button type="button" class="dock-btn" data-target="hal-pengaturan" title="Pengaturan">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </nav>
+
+    </div>
+
   </div>
 
-  <!-- MODAL: PEMBAYARAN -->
+  <!-- ======================================================== -->
+  <!-- MODAL: PEMILIH MEJA (Table Picker)                       -->
+  <!-- ======================================================== -->
+  <div id="modalPilihMeja" class="modal-latar" hidden>
+    <div class="modal-kotak modal-medium">
+      <div class="modal-kepala">
+        <h3>Pilih Meja Pesanan</h3>
+        <button type="button" class="btn-tutup-modal" id="btnTutupModalMeja">✕</button>
+      </div>
+      <div class="modal-badan">
+        <p class="muted-text" style="margin-bottom: 16px;">Tentukan nomor meja untuk pesanan saat ini:</p>
+        <div class="grid-pilih-meja-modal" id="wadahPilihMejaModal">
+          <!-- Meja 1..19 + Bungkus -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PEMILIH DISKON (Discount Picker)                  -->
+  <!-- ======================================================== -->
+  <div id="modalPilihDiskon" class="modal-latar" hidden>
+    <div class="modal-kotak modal-medium">
+      <div class="modal-kepala">
+        <h3>Pilih Potongan / Diskon</h3>
+        <button type="button" class="btn-tutup-modal" id="btnTutupModalDiskon">✕</button>
+      </div>
+      <div class="modal-badan">
+        <div class="daftar-preset-diskon">
+          <button type="button" class="btn-preset-diskon" data-pct="0">Tanpa Diskon (Reset)</button>
+          <button type="button" class="btn-preset-diskon" data-pct="5">Diskon Promo Bakso 5%</button>
+          <button type="button" class="btn-preset-diskon" data-pct="10">Diskon Pelanggan Setia 10%</button>
+          <button type="button" class="btn-preset-diskon" data-nom="10000">Potongan Hemat Rp10.000</button>
+        </div>
+        <div class="input-diskon-custom" style="margin-top: 20px;">
+          <label for="inputCustomDiskonNominal">Atau Masukkan Nominal Khusus (Rp):</label>
+          <div class="baris-input-group">
+            <input type="number" id="inputCustomDiskonNominal" min="0" step="1000" placeholder="0">
+            <button type="button" class="btn-utama-dark" id="btnTerapkanDiskonCustom">Terapkan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SPOTLIGHT PENCARIAN CEPAT                         -->
+  <!-- ======================================================== -->
+  <div id="modalSearchSpotlight" class="modal-latar" hidden>
+    <div class="modal-kotak modal-search-box">
+      <div class="baris-spotlight-input">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="inputSpotlightSearch" placeholder="Cari bakso urat, mie ayam, es jeruk, lontong..." autocomplete="off">
+        <button type="button" class="btn-tutup-modal" id="btnTutupSpotlight">✕</button>
+      </div>
+      <div class="hasil-spotlight" id="wadahHasilSpotlight">
+        <!-- Hasil pencarian instan -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PEMBAYARAN KASIR (Clean Modern Look)               -->
+  <!-- ======================================================== -->
   <div id="modalBayar" class="modal-latar" hidden>
     <div class="modal-kotak modal-lebar">
       <div class="modal-kepala">
-        <h2>Pembayaran Meja</h2>
+        <h2>Pembayaran Pesanan</h2>
         <button type="button" class="btn-tutup-modal" id="btnTutupBayar">✕</button>
       </div>
       <div class="modal-badan grid-bayar">
         
         <!-- Kolom Kiri: Rincian & Metode -->
         <div class="kolom-bayar-info">
-          <div class="kotak-tagihan">
+          <div class="kotak-tagihan-modern">
             <span class="label-tagihan">Total Tagihan</span>
             <strong class="nilai-tagihan" id="bayarTotalTagihan">Rp0</strong>
           </div>
 
           <label class="label-bagian">Pilih Metode Pembayaran</label>
-          <div class="opsi-metode" id="wadahMetode">
-            <label class="metode-kartu aktif">
+          <div class="opsi-metode-modern" id="wadahMetode">
+            <label class="metode-kartu-modern aktif">
               <input type="radio" name="metodeBayar" value="Tunai" checked>
-              <span>💵 Tunai</span>
+              <span class="nama-metode">💵 Tunai (Cash)</span>
             </label>
-            <label class="metode-kartu">
+            <label class="metode-kartu-modern">
               <input type="radio" name="metodeBayar" value="QRIS">
-              <span>📱 QRIS</span>
+              <span class="nama-metode">📱 QRIS Instan</span>
             </label>
-            <label class="metode-kartu">
+            <label class="metode-kartu-modern">
               <input type="radio" name="metodeBayar" value="Transfer">
-              <span>🏦 Transfer</span>
+              <span class="nama-metode">🏦 Transfer Bank</span>
             </label>
           </div>
 
-          <!-- Bagian QRIS -->
-          <div id="panelQris" class="panel-tambahan" hidden>
+          <!-- Panel QRIS -->
+          <div id="panelQris" class="panel-tambahan-modern" hidden>
             <div class="qris-preview">
-              <img src="qris.svg" alt="QRIS Bakso Pak Darto" width="180" height="180">
-              <p>Scan menggunakan BCA, Mandiri, GoPay, OVO, ShopeePay, dll.</p>
+              <img src="qris.svg" alt="QRIS Bakso Pak Darto" width="170" height="170">
+              <p>Scan barcode dengan BCA, Mandiri, GoPay, OVO, ShopeePay, atau Bank Jago.</p>
             </div>
           </div>
 
-          <!-- Bagian Kembalian -->
-          <div class="kotak-kembalian" id="kotakKembalian">
+          <!-- Kotak Kembalian -->
+          <div class="kotak-kembalian-modern" id="kotakKembalian">
             <span>Kembalian</span>
             <strong id="bayarKembalian">Rp0</strong>
           </div>
@@ -365,14 +741,14 @@
 
         <!-- Kolom Kanan: Kalkulator Tunai & Numpad -->
         <div class="kolom-bayar-aksi" id="panelTunai">
-          <label for="inputUangDiterima">Uang Diterima dari Pelanggan</label>
-          <div class="baris-input-uang">
+          <label for="inputUangDiterima" class="label-input-tunai">Uang Diterima dari Pelanggan</label>
+          <div class="baris-input-uang-modern">
             <input type="text" id="inputUangDiterima" placeholder="0" readonly>
-            <button type="button" class="btn-clear" id="btnHapusInputUang">C</button>
+            <button type="button" class="btn-clear-modern" id="btnHapusInputUang">C</button>
           </div>
 
           <!-- Tombol Uang Cepat -->
-          <div class="tombol-uang-cepat">
+          <div class="tombol-uang-cepat-modern">
             <button type="button" class="btn-uang-cepat" id="btnUangPas">Uang Pas</button>
             <button type="button" class="btn-uang-cepat" data-tambah="10000">+10rb</button>
             <button type="button" class="btn-uang-cepat" data-tambah="20000">+20rb</button>
@@ -381,7 +757,7 @@
           </div>
 
           <!-- Numpad 3x4 -->
-          <div class="numpad">
+          <div class="numpad-modern">
             <button type="button" class="btn-num" data-num="1">1</button>
             <button type="button" class="btn-num" data-num="2">2</button>
             <button type="button" class="btn-num" data-num="3">3</button>
@@ -396,7 +772,7 @@
             <button type="button" class="btn-num" data-num="back">⌫</button>
           </div>
 
-          <button type="button" class="btn-utama besar penuh" id="btnProsesBayar">
+          <button type="button" class="btn-konfirmasi-bayar" id="btnProsesBayar">
             Konfirmasi & Cetak Struk
           </button>
         </div>
@@ -405,7 +781,9 @@
     </div>
   </div>
 
-  <!-- MODAL: STRUK THERMAL (CETAK) -->
+  <!-- ======================================================== -->
+  <!-- MODAL: STRUK THERMAL CETAK 58mm                           -->
+  <!-- ======================================================== -->
   <div id="modalStruk" class="modal-latar" hidden>
     <div class="modal-kotak modal-struk-wadah">
       <div class="modal-kepala tanpa-garis no-print">
@@ -445,6 +823,10 @@
             <span>Diskon</span>
             <span id="strukDiskon">Rp0</span>
           </div>
+          <div class="struk-baris" id="strukBarisPajak">
+            <span>Pajak (PB1)</span>
+            <span id="strukPajak">Rp0</span>
+          </div>
           <div class="struk-baris struk-tebal">
             <span>TOTAL</span>
             <span id="strukTotal">Rp0</span>
@@ -467,26 +849,28 @@
       </div>
 
       <div class="modal-kaki no-print">
-        <button type="button" class="btn-sekunder" id="btnTransaksiBaru">Pesanan Baru</button>
-        <button type="button" class="btn-utama" id="btnCetakStruk">🖨️ Cetak Nota (58mm)</button>
+        <button type="button" class="btn-outline-action" id="btnTransaksiBaru">Pesanan Baru</button>
+        <button type="button" class="btn-utama-dark" id="btnCetakStruk">🖨️ Cetak Nota (58mm)</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: EDIT / TAMBAH MENU -->
+  <!-- ======================================================== -->
+  <!-- MODAL: EDIT / TAMBAH MENU PRODUK                          -->
+  <!-- ======================================================== -->
   <div id="modalFormProduk" class="modal-latar" hidden>
     <div class="modal-kotak">
       <div class="modal-kepala">
-        <h3 id="judulModalProduk">Tambah Menu Bakso</h3>
+        <h3 id="judulModalProduk">Tambah Menu</h3>
         <button type="button" class="btn-tutup-modal" id="btnTutupModalProduk">✕</button>
       </div>
       <form id="formProduk" class="modal-badan">
         <input type="hidden" id="formProdukId">
-        <div class="bidang-form">
+        <div class="field-setting">
           <label for="formNamaProduk">Nama Menu *</label>
-          <input type="text" id="formNamaProduk" required placeholder="Contoh: Bakso Urat Jumbo">
+          <input type="text" id="formNamaProduk" required placeholder="Contoh: Bakso Urat Granat">
         </div>
-        <div class="bidang-form">
+        <div class="field-setting">
           <label for="formKategoriProduk">Kategori *</label>
           <input type="text" id="formKategoriProduk" required placeholder="Bakso Kuah, Mie Ayam, Minuman, Pelengkap..." list="listKategori">
           <datalist id="listKategori">
@@ -497,33 +881,73 @@
           </datalist>
         </div>
         <div class="baris-ganda">
-          <div class="bidang-form">
+          <div class="field-setting">
             <label for="formHargaJual">Harga Jual (Rp) *</label>
             <input type="number" id="formHargaJual" required min="0" step="500" placeholder="25000">
           </div>
-          <div class="bidang-form">
+          <div class="field-setting">
             <label for="formHargaModal">Harga Modal (Rp)</label>
             <input type="number" id="formHargaModal" min="0" step="500" placeholder="15000">
           </div>
         </div>
         <div class="baris-ganda">
-          <div class="bidang-form">
+          <div class="field-setting">
             <label for="formStok">Porsi Tersedia *</label>
             <input type="number" id="formStok" required min="0" value="50">
           </div>
-          <div class="bidang-form">
+          <div class="field-setting">
             <label for="formKode">Kode Menu (Opsional)</label>
             <input type="text" id="formKode" placeholder="BKS-01">
           </div>
         </div>
+        <div class="field-setting">
+          <label for="formGambar">URL Foto Menu (Opsional)</label>
+          <input type="url" id="formGambar" placeholder="https://images.unsplash.com/...">
+        </div>
         <div class="modal-kaki">
-          <button type="button" class="btn-sekunder" id="btnBatalProduk">Batal</button>
-          <button type="submit" class="btn-utama">Simpan Menu</button>
+          <button type="button" class="btn-outline-action" id="btnBatalProduk">Batal</button>
+          <button type="submit" class="btn-utama-dark">Simpan Menu</button>
         </div>
       </form>
     </div>
   </div>
 
-  <script src="app.js?v=2026112102"></script>
+  <!-- ======================================================== -->
+  <!-- MODAL: KUNCI LAYAR PIN KASIR                              -->
+  <!-- ======================================================== -->
+  <div id="layarKunci" class="layar-kunci-latar" hidden>
+    <div class="kartu-kunci-pin">
+      <div class="brand-badge-circle besar">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+      </div>
+      <h2>Bakso Pak Darto</h2>
+      <p class="sub-kunci">NataArta POS · Masukkan PIN Kasir</p>
+
+      <div class="indikator-pin-wadah" id="pinIndikator">
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+      </div>
+
+      <div class="pad-pin">
+        <button type="button" class="btn-pin" data-angka="1">1</button>
+        <button type="button" class="btn-pin" data-angka="2">2</button>
+        <button type="button" class="btn-pin" data-angka="3">3</button>
+        <button type="button" class="btn-pin" data-angka="4">4</button>
+        <button type="button" class="btn-pin" data-angka="5">5</button>
+        <button type="button" class="btn-pin" data-angka="6">6</button>
+        <button type="button" class="btn-pin" data-angka="7">7</button>
+        <button type="button" class="btn-pin" data-angka="8">8</button>
+        <button type="button" class="btn-pin" data-angka="9">9</button>
+        <button type="button" class="btn-pin batal" id="btnBatalPin">Batal</button>
+        <button type="button" class="btn-pin" data-angka="0">0</button>
+        <button type="button" class="btn-pin back" id="btnHapusPin">⌫</button>
+      </div>
+      <small class="hint-pin">PIN Kasir Bawaan: 1234</small>
+    </div>
+  </div>
+
+  <script src="app.js?v=2026112103"></script>
 </body>
 </html>
