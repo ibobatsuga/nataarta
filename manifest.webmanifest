@@ -1,0 +1,18 @@
+{
+  "name": "NataArta — POS Bakso Pak Darto",
+  "short_name": "NataArta",
+  "description": "Sistem Kasir Offline Pintar untuk Bakso Pak Darto",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1c1917",
+  "theme_color": "#b91c1c",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "ikon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

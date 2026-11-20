@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NataArta — Kasir Bakso Pak Darto</title>
+  <meta name="description" content="NataArta: Aplikasi Kasir POS Cerdas & Praktis untuk Bakso Pak Darto.">
+  <meta name="theme-color" content="#b91c1c">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="ikon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="ikon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Layar Masuk / Kunci PIN (Opsional) -->
+  <div id="layarKunci" class="layar-kunci" hidden>
+    <div class="kunci-kartu">
+      <div class="kunci-logo">
+        <img src="ikon.svg" alt="NataArta" width="56" height="56">
+      </div>
+      <h2 id="judulTokoKunci">Bakso Pak Darto</h2>
+      <p class="sub-kunci">NataArta POS · Masukkan PIN Kasir</p>
+      
+      <div class="pin-indikator" id="pinIndikator">
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+        <span class="titik-pin"></span>
+      </div>
+
+      <div class="pad-pin">
+        <button type="button" class="btn-pin" data-angka="1">1</button>
+        <button type="button" class="btn-pin" data-angka="2">2</button>
+        <button type="button" class="btn-pin" data-angka="3">3</button>
+        <button type="button" class="btn-pin" data-angka="4">4</button>
+        <button type="button" class="btn-pin" data-angka="5">5</button>
+        <button type="button" class="btn-pin" data-angka="6">6</button>
+        <button type="button" class="btn-pin" data-angka="7">7</button>
+        <button type="button" class="btn-pin" data-angka="8">8</button>
+        <button type="button" class="btn-pin" data-angka="9">9</button>
+        <button type="button" class="btn-pin btn-khusus" id="btnBatalPin">Batal</button>
+        <button type="button" class="btn-pin" data-angka="0">0</button>
+        <button type="button" class="btn-pin btn-khusus" id="btnHapusPin">⌫</button>
+      </div>
+      <p class="info-kunci">PIN Kasir Bawaan: <b>1234</b></p>
+    </div>
+  </div>
+
+  <!-- Kontainer Aplikasi Utama -->
+  <div class="wadah-app">
+    
+    <!-- Sidebar / Navigasi Atas -->
+    <aside class="nav-samping">
+      <div class="brand-wadah">
+        <div class="brand-logo">
+          <img src="ikon.svg" alt="NataArta" width="38" height="38">
+        </div>
+        <div class="brand-teks">
+          <span class="brand-nama">NataArta</span>
+          <span class="brand-sub" id="namaTokoHeader">Bakso Pak Darto</span>
+          <span class="brand-status"><span class="titik-online"></span> POS Aktif</span>
+        </div>
+      </div>
+
+      <nav class="daftar-nav">
+        <button class="nav-item aktif" data-target="hal-kasir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Kasir</span>
+        </button>
+        <button class="nav-item" data-target="hal-produk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Menu</span>
+        </button>
+        <button class="nav-item" data-target="hal-riwayat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Riwayat</span>
+        </button>
+        <button class="nav-item" data-target="hal-laporan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Laporan</span>
+        </button>
+        <button class="nav-item" data-target="hal-pengaturan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Pengaturan</span>
+        </button>
+      </nav>
+
+      <div class="info-kasir-footer">
+        <div class="avatar-kasir" id="avatarKasir">D</div>
+        <div class="user-meta">
+          <strong id="labelKasir">Pak Darto</strong>
+          <small id="jamLive">00:00</small>
+        </div>
+        <button id="btnKunciSesi" class="btn-icon" title="Kunci Kasir" aria-label="Kunci Kasir">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Konten Utama -->
+    <main class="konten-halaman">
+      
+      <!-- HALAMAN 1: TERMINAL KASIR -->
+      <section id="hal-kasir" class="halaman aktif">
+        <div class="tata-kasir">
+          
+          <!-- Area Katalog & Menu -->
+          <div class="area-katalog">
+            <div class="baris-filter">
+              <div class="kotak-cari">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="inputCariProduk" placeholder="Cari bakso, mie, minuman, atau camilan..." autocomplete="off">
+              </div>
+              <div class="kategori-chips" id="wadahKategori">
+                <!-- Diisi dinamis -->
+              </div>
+            </div>
+
+            <div class="grid-produk" id="gridProduk">
+              <!-- Kartu produk diisi dinamis -->
+            </div>
+          </div>
+
+          <!-- Panel Pesanan / Keranjang -->
+          <div class="panel-keranjang">
+            <div class="kepala-keranjang">
+              <div>
+                <h2>Meja & Pesanan</h2>
+                <span class="no-pesanan" id="noInvoiceDraft">#INV-001</span>
+              </div>
+              <button type="button" class="btn-teks bahaya" id="btnKosongkanKeranjang">Reset</button>
+            </div>
+
+            <div class="daftar-item-keranjang" id="wadahItemKeranjang">
+              <!-- Item pesanan diisi dinamis -->
+            </div>
+
+            <div class="kalkulasi-keranjang">
+              <div class="baris-kalkulasi">
+                <span>Subtotal</span>
+                <span id="labelSubtotal">Rp0</span>
+              </div>
+              <div class="baris-kalkulasi">
+                <span class="label-fleksibel">
+                  Potongan / Diskon
+                  <button type="button" class="btn-tautan" id="btnAturDiskon">(Atur)</button>
+                </span>
+                <span id="labelDiskon" class="teks-sukses">-Rp0</span>
+              </div>
+              <div class="baris-kalkulasi baris-total">
+                <span>Total Bayar</span>
+                <strong id="labelGrandTotal">Rp0</strong>
+              </div>
+
+              <button type="button" class="btn-utama besar" id="btnBukaBayar" disabled>
+                <span>Proses Bayar</span>
+                <span id="btnBayarNominal">Rp0</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- HALAMAN 2: MANAJEMEN MENU -->
+      <section id="hal-produk" class="halaman">
+        <div class="kepala-halaman">
+          <div>
+            <h1>Daftar Menu & Stok</h1>
+            <p>Kelola menu bakso, mie, minuman, porsi dan harga jual.</p>
+          </div>
+          <button type="button" class="btn-utama" id="btnTambahProduk">+ Tambah Menu</button>
+        </div>
+
+        <div class="kartu-tabel">
+          <div class="baris-alat-tabel">
+            <input type="search" id="cariTabelProduk" placeholder="Cari nama menu..." class="input-tabel">
+            <span class="total-produk-label" id="labelTotalProduk">0 Menu</span>
+          </div>
+          <div class="tabel-gulir">
+            <table class="tabel-data">
+              <thead>
+                <tr>
+                  <th>Menu</th>
+                  <th>Kategori</th>
+                  <th>Harga Jual</th>
+                  <th>Harga Modal</th>
+                  <th>Porsi Tersedia</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyProduk">
+                <!-- Diisi via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- HALAMAN 3: RIWAYAT TRANSAKSI -->
+      <section id="hal-riwayat" class="halaman">
+        <div class="kepala-halaman">
+          <div>
+            <h1>Riwayat Transaksi</h1>
+            <p>Daftar pesanan selesai, cetak ulang struk, dan pembatalan nota.</p>
+          </div>
+          <div class="filter-tanggal">
+            <input type="date" id="filterTanggalRiwayat">
+            <button type="button" class="btn-sekunder" id="btnResetTanggal">Semua</button>
+          </div>
+        </div>
+
+        <div class="kartu-tabel">
+          <div class="tabel-gulir">
+            <table class="tabel-data">
+              <thead>
+                <tr>
+                  <th>No. Nota</th>
+                  <th>Waktu</th>
+                  <th>Kasir</th>
+                  <th>Pesanan</th>
+                  <th>Metode</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRiwayat">
+                <!-- Diisi via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- HALAMAN 4: LAPORAN PENJUALAN -->
+      <section id="hal-laporan" class="halaman">
+        <div class="kepala-halaman">
+          <div>
+            <h1>Laporan Penjualan</h1>
+            <p>Ringkasan omzet Bakso Pak Darto, laba kotor, dan menu paling laku.</p>
+          </div>
+          <div class="periode-pills" id="wadahPeriodeLaporan">
+            <button type="button" class="pil aktif" data-periode="hari">Hari Ini</button>
+            <button type="button" class="pil" data-periode="minggu">7 Hari</button>
+            <button type="button" class="pil" data-periode="bulan">Bulan Ini</button>
+            <button type="button" class="pil" data-periode="semua">Semua</button>
+          </div>
+        </div>
+
+        <div class="grid-statistik">
+          <div class="kartu-stat">
+            <span class="stat-label">Total Omzet</span>
+            <strong class="stat-nilai" id="statOmzet">Rp0</strong>
+            <small class="stat-ket">Penjualan bersih</small>
+          </div>
+          <div class="kartu-stat">
+            <span class="stat-label">Total Transaksi</span>
+            <strong class="stat-nilai" id="statTransaksi">0</strong>
+            <small class="stat-ket">Nota lunas</small>
+          </div>
+          <div class="kartu-stat">
+            <span class="stat-label">Estimasi Laba Kotor</span>
+            <strong class="stat-nilai teks-sukses" id="statLaba">Rp0</strong>
+            <small class="stat-ket">Omzet - Harga Modal</small>
+          </div>
+          <div class="kartu-stat">
+            <span class="stat-label">Porsi Terjual</span>
+            <strong class="stat-nilai" id="statItemTerjual">0</strong>
+            <small class="stat-ket">Total mangkok / porsi</small>
+          </div>
+        </div>
+
+        <div class="kartu-tabel" style="margin-top: 24px;">
+          <h3 style="margin-bottom: 16px;">Top 5 Menu Paling Favorit</h3>
+          <table class="tabel-data">
+            <thead>
+              <tr>
+                <th>Peringkat</th>
+                <th>Nama Menu</th>
+                <th>Porsi Terjual</th>
+                <th>Total Omzet</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyTopProduk">
+              <!-- Diisi JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- HALAMAN 5: PENGATURAN -->
+      <section id="hal-pengaturan" class="halaman">
+        <div class="kepala-halaman">
+          <div>
+            <h1>Pengaturan NataArta</h1>
+            <p>Kelola data warung, pesan struk, keamanan PIN kasir, dan backup.</p>
+          </div>
+        </div>
+
+        <div class="grid-pengaturan">
+          <!-- Profil Warung -->
+          <div class="kartu-pengaturan">
+            <h3>Profil Warung</h3>
+            <form id="formProfilToko">
+              <div class="bidang-form">
+                <label for="setNamaToko">Nama Warung</label>
+                <input type="text" id="setNamaToko" required>
+              </div>
+              <div class="bidang-form">
+                <label for="setAlamatToko">Alamat Warung</label>
+                <input type="text" id="setAlamatToko">
+              </div>
+              <div class="bidang-form">
+                <label for="setTelpToko">Nomor WhatsApp / Telp</label>
+                <input type="text" id="setTelpToko">
+              </div>
+              <div class="bidang-form">
+                <label for="setCatatanStruk">Pesan Struk (Footer)</label>
+                <input type="text" id="setCatatanStruk">
+              </div>
+              <button type="submit" class="btn-utama">Simpan Profil</button>
+            </form>
+          </div>
+
+          <!-- Keamanan & Backup -->
+          <div class="kartu-pengaturan">
+            <h3>Keamanan PIN Kasir</h3>
+            <form id="formKeamanan">
+              <div class="bidang-form">
+                <label class="label-switch">
+                  <input type="checkbox" id="setGunakanPin">
+                  <span>Aktifkan Kunci Layar PIN</span>
+                </label>
+                <small class="bantu">Mencegah akses kasir yang tidak diizinkan saat ditinggal.</small>
+              </div>
+              <div class="bidang-form">
+                <label for="setPinBaru">Ubah PIN Kasir (4 Angka)</label>
+                <input type="password" maxlength="4" pattern="\d{4}" id="setPinBaru" placeholder="1234">
+              </div>
+              <button type="submit" class="btn-sekunder">Perbarui PIN</button>
+            </form>
+
+            <hr class="garis-pisah">
+
+            <h3>Backup & Pemulihan Data</h3>
+            <p class="redup-kecil">Data tersimpan di perangkat kasir. Unduh backup berkala.</p>
+            <div class="baris-tombol-backup">
+              <button type="button" class="btn-sekunder" id="btnEksporJson">Unduh Cadangan JSON</button>
+              <label class="btn-sekunder tombol-file">
+                Pulihkan Cadangan JSON
+                <input type="file" id="inputImporJson" accept=".json" hidden>
+              </label>
+              <button type="button" class="btn-sekunder" id="btnEksporCsv">Ekspor Rekap CSV Transaksi</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: PEMBAYARAN -->
+  <div id="modalBayar" class="modal-latar" hidden>
+    <div class="modal-kotak modal-lebar">
+      <div class="modal-kepala">
+        <h2>Pembayaran Meja</h2>
+        <button type="button" class="btn-tutup-modal" id="btnTutupBayar">✕</button>
+      </div>
+      <div class="modal-badan grid-bayar">
+        
+        <!-- Kolom Kiri: Rincian & Metode -->
+        <div class="kolom-bayar-info">
+          <div class="kotak-tagihan">
+            <span class="label-tagihan">Total Tagihan</span>
+            <strong class="nilai-tagihan" id="bayarTotalTagihan">Rp0</strong>
+          </div>
+
+          <label class="label-bagian">Pilih Metode Pembayaran</label>
+          <div class="opsi-metode" id="wadahMetode">
+            <label class="metode-kartu aktif">
+              <input type="radio" name="metodeBayar" value="Tunai" checked>
+              <span>💵 Tunai</span>
+            </label>
+            <label class="metode-kartu">
+              <input type="radio" name="metodeBayar" value="QRIS">
+              <span>📱 QRIS</span>
+            </label>
+            <label class="metode-kartu">
+              <input type="radio" name="metodeBayar" value="Transfer">
+              <span>🏦 Transfer</span>
+            </label>
+          </div>
+
+          <!-- Bagian QRIS -->
+          <div id="panelQris" class="panel-tambahan" hidden>
+            <div class="qris-preview">
+              <img src="qris.svg" alt="QRIS Bakso Pak Darto" width="180" height="180">
+              <p>Scan menggunakan BCA, Mandiri, GoPay, OVO, ShopeePay, dll.</p>
+            </div>
+          </div>
+
+          <!-- Bagian Kembalian -->
+          <div class="kotak-kembalian" id="kotakKembalian">
+            <span>Kembalian</span>
+            <strong id="bayarKembalian">Rp0</strong>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Kalkulator Tunai & Numpad -->
+        <div class="kolom-bayar-aksi" id="panelTunai">
+          <label for="inputUangDiterima">Uang Diterima dari Pelanggan</label>
+          <div class="baris-input-uang">
+            <input type="text" id="inputUangDiterima" placeholder="0" readonly>
+            <button type="button" class="btn-clear" id="btnHapusInputUang">C</button>
+          </div>
+
+          <!-- Tombol Uang Cepat -->
+          <div class="tombol-uang-cepat">
+            <button type="button" class="btn-uang-cepat" id="btnUangPas">Uang Pas</button>
+            <button type="button" class="btn-uang-cepat" data-tambah="10000">+10rb</button>
+            <button type="button" class="btn-uang-cepat" data-tambah="20000">+20rb</button>
+            <button type="button" class="btn-uang-cepat" data-tambah="50000">+50rb</button>
+            <button type="button" class="btn-uang-cepat" data-tambah="100000">+100rb</button>
+          </div>
+
+          <!-- Numpad 3x4 -->
+          <div class="numpad">
+            <button type="button" class="btn-num" data-num="1">1</button>
+            <button type="button" class="btn-num" data-num="2">2</button>
+            <button type="button" class="btn-num" data-num="3">3</button>
+            <button type="button" class="btn-num" data-num="4">4</button>
+            <button type="button" class="btn-num" data-num="5">5</button>
+            <button type="button" class="btn-num" data-num="6">6</button>
+            <button type="button" class="btn-num" data-num="7">7</button>
+            <button type="button" class="btn-num" data-num="8">8</button>
+            <button type="button" class="btn-num" data-num="9">9</button>
+            <button type="button" class="btn-num" data-num="000">000</button>
+            <button type="button" class="btn-num" data-num="0">0</button>
+            <button type="button" class="btn-num" data-num="back">⌫</button>
+          </div>
+
+          <button type="button" class="btn-utama besar penuh" id="btnProsesBayar">
+            Konfirmasi & Cetak Struk
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: STRUK THERMAL (CETAK) -->
+  <div id="modalStruk" class="modal-latar" hidden>
+    <div class="modal-kotak modal-struk-wadah">
+      <div class="modal-kepala tanpa-garis no-print">
+        <h3>Nota Penjualan</h3>
+        <button type="button" class="btn-tutup-modal" id="btnTutupStruk">✕</button>
+      </div>
+
+      <!-- KERTAS STRUK (Area Print 58mm) -->
+      <div class="kertas-struk" id="kertasStruk">
+        <div class="struk-header">
+          <h2 id="strukTokoNama">Bakso Pak Darto</h2>
+          <p id="strukTokoAlamat">Jl. Kuliner Nusantara No. 12</p>
+          <p id="strukTokoTelp">Telp/WA: 0812-9876-5432</p>
+          <div class="struk-garis">================================</div>
+          <div class="struk-meta">
+            <span id="strukInvoice">INV-001</span>
+            <span id="strukWaktu">21/11/2026 12:00</span>
+          </div>
+          <div class="struk-meta">
+            <span>Kasir: <b id="strukKasir">Pak Darto</b></span>
+            <span id="strukMetode">Tunai</span>
+          </div>
+          <div class="struk-garis">--------------------------------</div>
+        </div>
+
+        <div class="struk-items" id="strukItems">
+          <!-- Item baris struk -->
+        </div>
+
+        <div class="struk-garis">--------------------------------</div>
+        <div class="struk-totalan">
+          <div class="struk-baris">
+            <span>Subtotal</span>
+            <span id="strukSubtotal">Rp0</span>
+          </div>
+          <div class="struk-baris" id="strukBarisDiskon">
+            <span>Diskon</span>
+            <span id="strukDiskon">Rp0</span>
+          </div>
+          <div class="struk-baris struk-tebal">
+            <span>TOTAL</span>
+            <span id="strukTotal">Rp0</span>
+          </div>
+          <div class="struk-baris">
+            <span>Bayar</span>
+            <span id="strukBayar">Rp0</span>
+          </div>
+          <div class="struk-baris">
+            <span>Kembalian</span>
+            <span id="strukKembalian">Rp0</span>
+          </div>
+        </div>
+
+        <div class="struk-footer">
+          <div class="struk-garis">================================</div>
+          <p id="strukFooterPesan">Matur nuwun sampun rawuh!</p>
+          <p class="struk-bawah">NataArta POS — Solusi Kasir Pintar</p>
+        </div>
+      </div>
+
+      <div class="modal-kaki no-print">
+        <button type="button" class="btn-sekunder" id="btnTransaksiBaru">Pesanan Baru</button>
+        <button type="button" class="btn-utama" id="btnCetakStruk">🖨️ Cetak Nota (58mm)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT / TAMBAH MENU -->
+  <div id="modalFormProduk" class="modal-latar" hidden>
+    <div class="modal-kotak">
+      <div class="modal-kepala">
+        <h3 id="judulModalProduk">Tambah Menu Bakso</h3>
+        <button type="button" class="btn-tutup-modal" id="btnTutupModalProduk">✕</button>
+      </div>
+      <form id="formProduk" class="modal-badan">
+        <input type="hidden" id="formProdukId">
+        <div class="bidang-form">
+          <label for="formNamaProduk">Nama Menu *</label>
+          <input type="text" id="formNamaProduk" required placeholder="Contoh: Bakso Urat Jumbo">
+        </div>
+        <div class="bidang-form">
+          <label for="formKategoriProduk">Kategori *</label>
+          <input type="text" id="formKategoriProduk" required placeholder="Bakso Kuah, Mie Ayam, Minuman, Pelengkap..." list="listKategori">
+          <datalist id="listKategori">
+            <option value="Bakso Kuah">
+            <option value="Mie Ayam">
+            <option value="Minuman">
+            <option value="Pelengkap">
+          </datalist>
+        </div>
+        <div class="baris-ganda">
+          <div class="bidang-form">
+            <label for="formHargaJual">Harga Jual (Rp) *</label>
+            <input type="number" id="formHargaJual" required min="0" step="500" placeholder="25000">
+          </div>
+          <div class="bidang-form">
+            <label for="formHargaModal">Harga Modal (Rp)</label>
+            <input type="number" id="formHargaModal" min="0" step="500" placeholder="15000">
+          </div>
+        </div>
+        <div class="baris-ganda">
+          <div class="bidang-form">
+            <label for="formStok">Porsi Tersedia *</label>
+            <input type="number" id="formStok" required min="0" value="50">
+          </div>
+          <div class="bidang-form">
+            <label for="formKode">Kode Menu (Opsional)</label>
+            <input type="text" id="formKode" placeholder="BKS-01">
+          </div>
+        </div>
+        <div class="modal-kaki">
+          <button type="button" class="btn-sekunder" id="btnBatalProduk">Batal</button>
+          <button type="submit" class="btn-utama">Simpan Menu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
